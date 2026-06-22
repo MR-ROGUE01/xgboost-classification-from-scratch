@@ -1,27 +1,27 @@
-# XGBoost Classification From Scratch
+# 🚀 XGBoost Classification From Scratch
 
-## Overview
+## 📌 Overview
 
-This project demonstrates how XGBoost works internally by implementing the core concepts of binary classification step by step before comparing the results with the official XGBoost library.
+This project explores how XGBoost works internally by implementing the core concepts of binary classification from scratch and then comparing the results with the official XGBoost library.
 
-The implementation covers:
+The project covers:
 
-* Log-Odds Initialization
-* Sigmoid Transformation
-* Gradient Calculation
-* Hessian Calculation
-* Gain-Based Split Selection
-* Leaf Weight Computation
-* Prediction Updates
-* Decision Boundary Visualization
-* XGBoost Classifier using the official library
-* Hyperparameter Tuning with GridSearchCV
-
-The dataset used is the Moon Dataset generated using `sklearn.datasets.make_moons`.
+* ✅ Log-Odds Initialization
+* ✅ Sigmoid Function
+* ✅ Gradient Calculation
+* ✅ Hessian Calculation
+* ✅ Gain-Based Split Selection
+* ✅ Leaf Weight Computation
+* ✅ Prediction Updates
+* ✅ Decision Boundary Visualization
+* ✅ XGBoost Classifier
+* ✅ Hyperparameter Tuning with GridSearchCV
 
 ---
 
-## Dataset
+## 📊 Dataset
+
+The Moon Dataset was generated using Scikit-Learn.
 
 ```python
 from sklearn.datasets import make_moons
@@ -33,99 +33,115 @@ X, y = make_moons(
 )
 ```
 
-The dataset contains two features, making it ideal for visualizing decision boundaries.
+This dataset contains two features, making it ideal for visualizing decision boundaries.
 
 ---
 
-## XGBoost From Scratch
+## 🧠 XGBoost From Scratch
 
-### Step 1: Base Prediction
+### 1️⃣ Base Prediction (Log Odds)
 
-Compute the initial prediction using log-odds:
+The initial prediction is calculated as:
 
-[
-\text{Base Score} = \log\left(\frac{p}{1-p}\right)
-]
+```math
+p = \frac{\text{Number of Positive Samples}}{\text{Total Samples}}
+```
+
+```math
+F_0 = \log\left(\frac{p}{1-p}\right)
+```
+
+---
+
+### 2️⃣ Sigmoid Function
+
+Convert log-odds into probabilities:
+
+```math
+\sigma(x)=\frac{1}{1+e^{-x}}
+```
+
+---
+
+### 3️⃣ Gradient Calculation
+
+For binary log-loss:
+
+```math
+g_i = p_i - y_i
+```
 
 where:
 
-[
-p = \text{mean}(y)
-]
+* $p_i$ = predicted probability
+* $y_i$ = actual label
 
 ---
 
-### Step 2: Probability Prediction
+### 4️⃣ Hessian Calculation
 
-Apply the sigmoid function:
-
-[
-\sigma(x)=\frac{1}{1+e^{-x}}
-]
-
----
-
-### Step 3: Gradient Calculation
-
-[
-g_i = p_i - y_i
-]
-
----
-
-### Step 4: Hessian Calculation
-
-[
+```math
 h_i = p_i(1-p_i)
-]
+```
 
 ---
 
-### Step 5: Gain Calculation
+### 5️⃣ Gain Calculation
 
-[
+XGBoost chooses the split with the maximum gain:
+
+```math
 Gain=
 \frac{1}{2}
 \left(
 \frac{G_L^2}{H_L+\lambda}
 +
 \frac{G_R^2}{H_R+\lambda}
--------------------------
-
+-
 \frac{G^2}{H+\lambda}
 \right)
-]
-
-This gain metric is used to find the best split.
-
----
-
-### Step 6: Leaf Weight
-
-[
-w^*=
--\frac{\sum g_i}
-{\sum h_i+\lambda}
-]
-
----
-
-### Step 7: Prediction Update
-
-[
-F_{new}(x)=
-F_{old}(x)
-+
-\eta \times Tree(x)
-]
+```
 
 where:
 
-* η = learning rate
+* $G_L, G_R$ = Sum of gradients
+* $H_L, H_R$ = Sum of hessians
+* $\lambda$ = Regularization parameter
 
 ---
 
-## Official XGBoost Implementation
+### 6️⃣ Optimal Leaf Weight
+
+The prediction value assigned to a leaf is:
+
+```math
+w^* =
+-\frac{\sum g_i}
+{\sum h_i + \lambda}
+```
+
+---
+
+### 7️⃣ Prediction Update
+
+Each boosting round updates the model prediction:
+
+```math
+F_{m}(x)
+=
+F_{m-1}(x)
++
+\eta \cdot T_m(x)
+```
+
+where:
+
+* $\eta$ = Learning Rate
+* $T_m(x)$ = Prediction from the current tree
+
+---
+
+## 🌲 XGBoost Using Library
 
 ```python
 from xgboost import XGBClassifier
@@ -141,9 +157,9 @@ xgb = XGBClassifier(
 
 ---
 
-## Hyperparameter Tuning
+## 🔍 Hyperparameter Tuning
 
-GridSearchCV was used to find the best model.
+GridSearchCV was used to find the optimal parameters.
 
 ```python
 param_grid = {
@@ -154,22 +170,41 @@ param_grid = {
 }
 ```
 
+Best Parameters:
+
+```python
+{
+    'learning_rate': 0.1,
+    'max_depth': 3,
+    'n_estimators': 100,
+    'subsample': 1.0
+}
+```
+
 ---
 
-## Visualizations
+## 📈 Visualizations
 
 * Moon Dataset Visualization
 * Best Split Visualization
 * First Tree Prediction
 * Decision Boundary
-* Decision Boundary for Different Tree Depths
-* Decision Boundary of the Best GridSearchCV Model
+* Probability Surface
+* GridSearchCV Best Model Decision Boundary
+* Decision Boundary Comparison for Different Tree Depths
 
 ---
 
-## Technologies Used
+## 🛠️ Technologies Used
 
-* Python
+<div align="left">
+
+<img src="https://skillicons.dev/icons?i=python" height="40"/>
+<img src="https://skillicons.dev/icons?i=numpy" height="40"/>
+<img src="https://skillicons.dev/icons?i=pandas" height="40"/>
+
+</div>
+
 * NumPy
 * Pandas
 * Matplotlib
@@ -178,22 +213,20 @@ param_grid = {
 
 ---
 
----
+## 🎯 Key Learnings
 
-## Key Learnings
-
-* Difference between Gradient Boosting and XGBoost
+* Understanding XGBoost Internals
 * Role of Gradients and Hessians
-* Gain-based splitting
-* Leaf weight optimization
-* Effect of hyperparameters on decision boundaries
-* Practical implementation of XGBoost using Scikit-Learn
+* Gain-Based Tree Construction
+* Leaf Weight Optimization
+* Effect of Hyperparameters on Decision Boundaries
+* Comparison Between Manual and Library Implementations
 
 ---
 
-## Author
+## 👨‍💻 Author
 
-Raj Kumar Gupta
+**Raj Kumar Gupta**
 
 B.Tech CSE (AI & ML)
 Amity University Jharkhand
